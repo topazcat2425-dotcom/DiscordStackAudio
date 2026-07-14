@@ -6,7 +6,9 @@ https://www.youtube.com/watch?v=bSnkR00N1HM
 # REQUIREMENTS:
 So you need VB Virtual Audio Cable for this:
 https://vb-audio.com/Cable/
-![On your discords "microphone input" settings near the bottom of discord UI, switch it to Cable Output (VB-Audio Virtual Cable)](MarkdownImages/discordMicSettings.pngdiscordMicSettings.png)
+
+
+![On your discords "microphone input" settings near the bottom of discord UI, switch it to Cable Output (VB-Audio Virtual Cable)](MarkdownImages/discordMicSettings.png)
 
 Then run the program and simply start talking!
 
