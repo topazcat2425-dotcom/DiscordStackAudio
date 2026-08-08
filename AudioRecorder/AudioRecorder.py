@@ -151,13 +151,23 @@ def record_to_file(path):
 
 
 # loops until the stack is full by making new audio files
-def startRecording(maxHeightOfStack):
+def startRecording(threadChecker):
+
     print("We are listening now")
     count = 0
-    while(count < maxHeightOfStack):
+    while(threadChecker.readBool()):
 
         record_to_file(f'AudioStuff/wavs/{count}.wav')
         print(f"done - result written to {count}.wav")
         count += 1
+
+        # kills the loop
+        if not threadChecker.readBool():
+            break
     
-    print("we're all finished recording fr \n----------------------------------------------")
+    print("we're all finished recording \n----------------------------------------------")
+
+# if __name__ == '__main__':
+#     print("please speak a word into the microphone")
+#     startRecording()
+#     print("done - result written to demo.wav")

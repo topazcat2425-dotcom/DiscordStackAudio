@@ -32,12 +32,15 @@ def getTopFile():
 
 # gets the duration of the file
 def getLength(file):
-    f = sf.SoundFile(f"AudioStuff\\wavs\\{file}")
-    # print('samples = {}'.format(f.frames))
-    # print('sample rate = {}'.format(f.samplerate))
-    # print('seconds = {}'.format(f.frames / f.samplerate))
+    
+    fileTime = 0
+    if (file != "-1.wav"):
+        f = sf.SoundFile(f"AudioStuff\\wavs\\{file}")
+        # print('samples = {}'.format(f.frames))
+        # print('sample rate = {}'.format(f.samplerate))
+        # print('seconds = {}'.format(f.frames / f.samplerate))
 
-    fileTime = float(format(f.frames / f.samplerate))
+        fileTime = float(format(f.frames / f.samplerate))
 
     baseTime = 5
     if (fileTime > baseTime):
@@ -66,7 +69,7 @@ def randomWait(bottomLimit, topLimit):
     print(x)
     time.sleep(x)
 
-def doTheStack(maxHeightOfStack):
+def doTheStack(threadChecker):
 
 
     # HERE TO CHANGE THE TIME BEFORE IT STARTS UNSTACKING!!
@@ -74,15 +77,19 @@ def doTheStack(maxHeightOfStack):
 
 
     print("-------------------------------------")
-    print(f"you have {timeBeforeStack} seconds to fill the stack before it starts removing")
+    print(f"You have {timeBeforeStack} seconds to fill the stack before it starts removing")
+    print(f"You can turn off the program by typing anything into the console ctrl+c will NOT work")
     print("-------------------------------------")
 
     time.sleep(timeBeforeStack)
     count = 1
-    while (count < maxHeightOfStack):
+    while (threadChecker.readBool()):
         file, duration = getTopFile()
 
-        if (file != "-1.wav"):
+        # kill the loop here
+        if not threadChecker.readBool():
+            break
+        elif (file != "-1.wav"):
             print(f"playing audio file {file}")
             playFile(file, duration)
         
@@ -90,5 +97,7 @@ def doTheStack(maxHeightOfStack):
             count += 1
         else:
             time.sleep(1)
+        
+        
     
     time.sleep(5)

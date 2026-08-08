@@ -1,19 +1,27 @@
 from threading import Thread
+from ThreadEnable import ThreadEnable
 import PlaysToMic.PlaysToMic as PlaysToMic
 import AudioRecorder.AudioRecorder as AudioRecorder
 import FileDeleter.FileDeleter as fileDeleter
+import ThreadEnabler.ThreadEnabler as ThreadEnabler
 
-# EDIT THIS TO INCREASE THE MAXIMUM FILES YOU HAVE TO FILL
-MAX_HEIGHT_OF_STACK = 10
+
+MAX_HEIGHT_OF_STACK = 15
 
 if __name__ == '__main__':
-    thread1 = Thread(target = PlaysToMic.doTheStack, args=(MAX_HEIGHT_OF_STACK,))
-    thread2 = Thread(target = AudioRecorder.startRecording, args=(MAX_HEIGHT_OF_STACK,))
+    boolean = ThreadEnable()
+
+    thread1 = Thread(target = PlaysToMic.doTheStack, args=(boolean,))
+    thread2 = Thread(target = AudioRecorder.startRecording, args=(boolean,))
+    thread3 = Thread(target = ThreadEnabler.running, args=(boolean,))
 
     thread1.start()
     thread2.start()
+    thread3.start()
 
     thread1.join()
     thread2.join()
+    thread3.join()
 
-    fileDeleter.deleteAllFiles("AudioStuff\\wavs")
+    if not boolean.readBool():
+        fileDeleter.deleteAllFiles("AudioStuff\\wavs")
