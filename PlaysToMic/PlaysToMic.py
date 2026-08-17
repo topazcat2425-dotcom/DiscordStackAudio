@@ -32,35 +32,39 @@ def getTopFile():
 
 # gets the duration of the file
 def getLength(file):
-    
-    fileTime = 0
-    if (file != "-1.wav"):
-        f = sf.SoundFile(f"AudioStuff\\wavs\\{file}")
-        # print('samples = {}'.format(f.frames))
-        # print('sample rate = {}'.format(f.samplerate))
-        # print('seconds = {}'.format(f.frames / f.samplerate))
+    try:
+        fileTime = 0
+        if (file != "-1.wav"):
+            f = sf.SoundFile(f"AudioStuff\\wavs\\{file}")
 
-        fileTime = float(format(f.frames / f.samplerate))
+            fileTime = float(format(f.frames / f.samplerate))
 
-    baseTime = 5
-    if (fileTime > baseTime):
-        baseTime = fileTime + 1
+        baseTime = 5
+        if (fileTime > baseTime):
+            baseTime = fileTime + 1
 
-    print(baseTime)
-    return(baseTime)
+        print(baseTime)
+        return(baseTime)
+    except Exception as e:
+        print(e)
+        print("it probably has to do with no -1 existing, dw aboot it")
+
 
 # plays the file through the VB virtual audio cable
 def playFile(file, duration):
     # duration = getLength(f"AudioStuff\\wavs\\{file}")
     mixer.init(devicename='CABLE Input (VB-Audio Virtual Cable)') #Initialize it with the correct device
-    mixer.music.load(f"AudioStuff\\wavs\\{file}") #Load the mp3
-    mixer.music.play() #Play it
+    try:
+        mixer.music.load(f"AudioStuff\\wavs\\{file}") #Load the mp3
+        mixer.music.play() #Play it
 
-    
-    time.sleep(duration)
-    mixer.music.unload()
-    mixer.music.stop()
-    print("playing?")
+        
+        time.sleep(duration)
+        mixer.music.unload()
+        mixer.music.stop()
+        print("playing?")
+    except Exception as e: 
+        print(e)
 
 # sleeps for a random amount of time... isn't used :I
 def randomWait(bottomLimit, topLimit):
@@ -86,18 +90,23 @@ def doTheStack(threadChecker):
     while (threadChecker.readBool()):
         file, duration = getTopFile()
 
+        print(f"file is {file}")
         # kill the loop here
         if not threadChecker.readBool():
             break
-        elif (file != "-1.wav"):
+        elif "-1" not in file:
             print(f"playing audio file {file}")
-            playFile(file, duration)
+
+            try:
+                playFile(file, duration)
+            except Exception as e: 
+                print(e)
+                print("something broke!")
         
             USED_FILES.append(file)
             count += 1
         else:
             time.sleep(1)
         
-        
-    
-    time.sleep(5)
+            
+        time.sleep(5)
